@@ -61,31 +61,43 @@ int main() {
     std::unordered_map<std::string, std::vector<std::string>> adj; // Adjacency list
     std::unordered_set<std::string> all_nodes; // Set of all node labels
 
-    // Regex to parse lines like: A[Project Planning] --> B[Design Architecture]
-    std::regex edge_regex(R"((\w+)\[([^\]]+)\]\s*-->\s*(\w+)\[([^\]]+)\])");
+    // Regex to parse lines like:
+    // A[Project Planning] --> B[Design Architecture]
+    // A --> C[Obtain Permits]
+    // J --> K
+    // K --> L[Interior Finishing]
+    std::regex edge_regex(R"((\w+)(?:\[(.*?)\])?\s*-->\s*(\w+)(?:\[(.*?)\])?)");
     std::smatch matches;
     std::string line;
 
-    std::cout << "Enter DAG definitions (e.g., A[Task A] --> B[Task B]). Enter EOF (Ctrl+D/Ctrl+Z) to finish:\n";
+    std::cout << "Enter DAG definitions (e.g., A[Task A] --> B[Task B], A --> C[Task C], J --> K, K --> L[Task L]). Enter EOF (Ctrl+D/Ctrl+Z) to finish:\n";
 
     // Read lines until EOF
     while (std::getline(std::cin, line)) {
-        // Skip empty lines
-        if (line.empty())
-            continue;
+        // Trim the line (optional)
+        // Remove leading and trailing whitespace
+        size_t start = line.find_first_not_of(" \t\r\n");
+        size_t end = line.find_last_not_of(" \t\r\n");
+        if (start == std::string::npos || end == std::string::npos) {
+            continue; // Skip empty or whitespace-only lines
+        }
+        line = line.substr(start, end - start + 1);
 
         // Apply regex to the line
         if (std::regex_match(line, matches, edge_regex)) {
-            std::cout << matches[1] << ":" << matches[2] << ":" << matches[3] << ":" << matches[4] << ":" << matches[5] << ":" << std::endl;
-            if (matches.size() == 5) { // matches[0] is the whole string
+            if (matches.size() >= 4) { // matches[0] is the whole string
                 std::string src_label = matches[1];
                 std::string src_name = matches[2];
                 std::string dst_label = matches[3];
                 std::string dst_name = matches[4];
 
-                // Map labels to names
-                label_to_name[src_label] = src_name;
-                label_to_name[dst_label] = dst_name;
+                // Map labels to names if names are provided
+                if (!src_name.empty()) {
+                    label_to_name[src_label] = src_name;
+                }
+                if (!dst_name.empty()) {
+                    label_to_name[dst_label] = dst_name;
+                }
 
                 // Add edge to adjacency list
                 adj[src_label].push_back(dst_label);

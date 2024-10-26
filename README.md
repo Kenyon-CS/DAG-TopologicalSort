@@ -25,7 +25,22 @@ C++Project to do a top
   - **Stack** (```sorted_stack```):
     - Stores nodes in the order of their completion times during DFS.
     -  Popping from this stack yields the topological order.
-    -  
+
+## Flexible Regex Parsing
+  - **Regex**:
+```
+std::regex edge_regex(R"((\w+)(?:\[(.*?)\])?\s*-->\s*(\w+)(?:\[(.*?)\])?)");
+```
+  - **Breakdown**:
+    - ```(\w+)```: Captures the **source label**.
+    - ```(?:\[(.*?)\])?```: Optional non-capturing group that captures the **source name** within square brackets ```[]```.
+    - ```\s*-->\s*```: Matches the arrow ```-->``` with optional surrounding whitespace.
+    - ```(\w+)```: Captures the **destination label**.
+    - ```(?:\[(.*?)\])?```: **Optional** non-capturing group that captures the destination name within square brackets ```[]```.
+  - **Benefit**s:
+    - **Flexibility**: Allows for lines where either or both nodes may lack descriptive names.
+    - **Comprehensive Matching**: Handles all provided input formats.
+
 ## Input:
 ```
 A[Project Planning] --> B[Design Architecture]
@@ -135,3 +150,4 @@ L [Interior Finishing]
 H [Roofing]
 O [Final Inspection]
 ```
+

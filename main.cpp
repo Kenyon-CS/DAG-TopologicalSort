@@ -76,7 +76,7 @@ int main() {
 
         // Apply regex to the line
         if (std::regex_match(line, matches, edge_regex)) {
-            std::cout << matches[1] << ":" << matches[1] << ":" << matches[1] << ":" << matches[1] << ":" << matches[1] << ":" << std::endl;
+            std::cout << matches[1] << ":" << matches[2] << ":" << matches[3] << ":" << matches[4] << ":" << matches[5] << ":" << std::endl;
             if (matches.size() == 5) { // matches[0] is the whole string
                 std::string src_label = matches[1];
                 std::string src_name = matches[2];

@@ -67,7 +67,7 @@ int main() {
     // A[Project Planning] --> B[Design Architecture]
     // A --> C[Obtain Permits]
     // J --> K
-    // K --> L[Interior Finishing]
+    // K[Interior Finishing] --> L
     regex edge_regex(R"((\w+)(?:\[(.*?)\])?\s*-->\s*(\w+)(?:\[(.*?)\])?)");
     smatch matches;
     string line;
